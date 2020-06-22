@@ -23,6 +23,7 @@
         <th>Address</th>
         <th>Edit</th>
         <th>Delete</th>
+        <th>View</th>
     </tr>
     <c:forEach items="${requestScope['customers']}" var="customer">
         <tr>
@@ -31,8 +32,14 @@
             <td>${customer.getAddress()}</td>
             <td><a href="/customers?action=edit&id=${customer.getId()}"><button type="button">Edit</button></a></td>
             <td><a href="/customers?action=delete&id=${customer.getId()}"><button type="button">Delete</button></a></td>
+            <td><a href="/customers?action=view&id=${customer.getId()}"><button type="button">View</button></a></td>
         </tr>
     </c:forEach>
 </table>
+<br><br>
+
+<%--<input type="text" name="submitValue" placeholder="Enter your word">--%>
+<%--<a href="/customers?action=view"><input type="submit" name="submitView" value="View customer"></a>--%>
+
 </body>
 </html>

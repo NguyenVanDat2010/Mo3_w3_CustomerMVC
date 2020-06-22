@@ -10,6 +10,11 @@
 <html>
 <head>
     <title>Create Customer</title>
+    <style>
+        .message{
+            color: green;
+        }
+    </style>
 </head>
 <body>
 <h1>Create new customer</h1>

@@ -10,6 +10,11 @@
 <html>
 <head>
     <title>Delete customer</title>
+    <style>
+        .message{
+            color: green;
+        }
+    </style>
 </head>
 <body>
 <h1>Delete customer</h1>

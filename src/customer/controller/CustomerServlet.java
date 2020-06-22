@@ -21,36 +21,38 @@ public class CustomerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
-        if (action == null){
+        if (action == null) {
             action = "";
         }
 
-        switch (action){
+        switch (action) {
             case "create":
-                createCustomer(request,response);
+                createCustomer(request, response);
                 break;
             case "edit":
-                editCustomer(request,response);
+                editCustomer(request, response);
                 break;
             case "delete":
-                deleteCustomer(request,response);
+                deleteCustomer(request, response);
                 break;
             default:
                 break;
         }
     }
 
-    /** Chức năng xóa một customer by id, id lấy từ form (list.jsp). Update tại form (delete.jsp) */
+    /**
+     * Chức năng xóa một customer by id, id lấy từ form (list.jsp). Update tại form (delete.jsp)
+     */
     private void deleteCustomer(HttpServletRequest request, HttpServletResponse response) {
-        int id  = Integer.parseInt(request.getParameter("id"));
+        int id = Integer.parseInt(request.getParameter("id"));
 
         Customer customer = this.customerService.findById(id);
 
         RequestDispatcher dispatcher;
 
-        if (customer == null){
+        if (customer == null) {
             dispatcher = request.getRequestDispatcher("error-404.jsp");
-        }else {
+        } else {
             this.customerService.delete(id);
             try {
                 response.sendRedirect("/customers");
@@ -60,7 +62,9 @@ public class CustomerServlet extends HttpServlet {
         }
     }
 
-    /** Chức năng sửa một customer by id, id lấy từ form (list.jsp). Update tại form (edit.jsp) */
+    /**
+     * Chức năng sửa một customer by id, id lấy từ form (list.jsp). Update tại form (edit.jsp)
+     */
     private void editCustomer(HttpServletRequest request, HttpServletResponse response) {
         int id = Integer.parseInt(request.getParameter("id"));
         String name = request.getParameter("name");
@@ -70,16 +74,16 @@ public class CustomerServlet extends HttpServlet {
         Customer customer = this.customerService.findById(id);
         RequestDispatcher dispatcher;
 
-        if (customer == null){
+        if (customer == null) {
             dispatcher = request.getRequestDispatcher("error-404.jsp");
-        }else {
+        } else {
             customer.setName(name);
             customer.setEmail(email);
             customer.setAddress(address);
 
-            this.customerService.update(id,customer);
+            this.customerService.update(id, customer);
 //            request.setAttribute("customer", customer);
-            request.setAttribute("message","Customer information was updated");
+            request.setAttribute("message", "Customer information was updated");
 
             dispatcher = request.getRequestDispatcher("customer/edit.jsp");
         }
@@ -92,18 +96,20 @@ public class CustomerServlet extends HttpServlet {
         }
     }
 
-    /** Thêm mới 1 customer trong form (create.jsp) */
+    /**
+     * Thêm mới 1 customer trong form (create.jsp)
+     */
     private void createCustomer(HttpServletRequest request, HttpServletResponse response) {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String address = request.getParameter("address");
-        int id = (int)(Math.random()*10000);
+        int id = (int) (Math.random() * 10000);
 
-        Customer customer = new Customer(id,name,email, address);
+        Customer customer = new Customer(id, name, email, address);
         this.customerService.save(customer);
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("customer/create.jsp");
-        request.setAttribute("message","New customer was created");
+        request.setAttribute("message", "New customer was created");
 
         try {
             dispatcher.forward(request, response);
@@ -127,13 +133,16 @@ public class CustomerServlet extends HttpServlet {
 
         switch (action) {
             case "create":
-                showCreateForm(request,response);
+                showCreateForm(request, response);
                 break;
             case "edit":
-                showEditForm(request,response);
+                showEditForm(request, response);
                 break;
             case "delete":
-                showDeleteForm(request,response);
+                showDeleteForm(request, response);
+                break;
+            case "view":
+                showViewCustomer(request, response);
                 break;
             default:
                 listCustomer(request, response);
@@ -141,18 +150,74 @@ public class CustomerServlet extends HttpServlet {
         }
     }
 
-    /** Hiển thị form delete khi lấy ra được id (delete.jsp) */
+    /** Hiển thị thông tin khách hàng khi lấy đc id */
+    private void showViewCustomer(HttpServletRequest request, HttpServletResponse response) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        Customer customer = this.customerService.findById(id);
+
+        RequestDispatcher dispatcher;
+
+        if (customer == null) {
+            dispatcher = request.getRequestDispatcher("error-404.jsp");
+        } else {
+            /** Hiển thị các dữ liệu bản ghi ra form "view.jsp" */
+            request.setAttribute("customer", customer);
+            dispatcher = request.getRequestDispatcher("customer/view.jsp");
+        }
+        try {
+            dispatcher.forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+//        String value = request.getParameter("submitValue");
+//        List<Customer> customerList = this.customerService.findAll();
+//
+//        RequestDispatcher dispatcher;
+//        Customer customer = null;
+//
+//        if (value == null){
+//            dispatcher = request.getRequestDispatcher("error-404.jsp");
+//        }else {
+//            for (int i=0;i<customerList.size();i++){
+//                if (
+//                        customerList.get(i).getId()==Integer.parseInt(value)||
+//                        customerList.get(i).getName().toLowerCase().contains(value) ||
+//                        customerList.get(i).getEmail().toLowerCase().contains(value)||
+//                        customerList.get(i).getAddress().toLowerCase().contains(value)
+//                ) {
+//                    customer = this.customerService.findById(i);
+//                    break;
+//                }
+//            }
+//            request.setAttribute("customer",customer);
+//            dispatcher = request.getRequestDispatcher("customer/view.jsp");
+//        }
+//        try {
+//            dispatcher.forward(request, response);
+//        } catch (ServletException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    /**
+     * Hiển thị form delete khi lấy ra được id (delete.jsp)
+     */
     private void showDeleteForm(HttpServletRequest request, HttpServletResponse response) {
         int id = Integer.parseInt(request.getParameter("id"));
         Customer customer = this.customerService.findById(id);
 
         RequestDispatcher dispatcher;
 
-        if (customer == null){
+        if (customer == null) {
             dispatcher = request.getRequestDispatcher("error-404.jsp");
-        }else {
+        } else {
             /** Hiển thị các dữ liệu bản ghi ra form "delete.jsp" của id cần xóa */
-            request.setAttribute("customer",customer);
+            request.setAttribute("customer", customer);
             dispatcher = request.getRequestDispatcher("customer/delete.jsp");
         }
         try {
@@ -164,21 +229,22 @@ public class CustomerServlet extends HttpServlet {
         }
     }
 
-    /** Hiển thị form edit khi có lấy ra được id (edit.jsp) */
+    /**
+     * Hiển thị form edit khi có lấy ra được id (edit.jsp)
+     */
     private void showEditForm(HttpServletRequest request, HttpServletResponse response) {
-        int id  = Integer.parseInt(request.getParameter("id"));
+        int id = Integer.parseInt(request.getParameter("id"));
         Customer customer = this.customerService.findById(id);
 
         RequestDispatcher dispatcher;
 
-        if (customer == null){
+        if (customer == null) {
             dispatcher = request.getRequestDispatcher("error-404.jsp");
-        }else {
+        } else {
             /** Hiển thị các dữ liệu bản ghi ra form "edit.jsp" của id cần sửa */
-            request.setAttribute("customer",customer);
+            request.setAttribute("customer", customer);
             dispatcher = request.getRequestDispatcher("customer/edit.jsp");
         }
-
         try {
             dispatcher.forward(request, response);
         } catch (ServletException e) {
@@ -188,7 +254,9 @@ public class CustomerServlet extends HttpServlet {
         }
     }
 
-    /** Hiển thị form tạo mới (create.jsp) */
+    /**
+     * Hiển thị form tạo mới (create.jsp)
+     */
     private void showCreateForm(HttpServletRequest request, HttpServletResponse response) {
         RequestDispatcher dispatcher = request.getRequestDispatcher("customer/create.jsp");
 
@@ -199,10 +267,11 @@ public class CustomerServlet extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
-    /** Danh sách customer (list.jsp) */
+    /**
+     * Danh sách customer (list.jsp)
+     */
     private void listCustomer(HttpServletRequest request, HttpServletResponse response) {
         List<Customer> customerList = this.customerService.findAll();
 

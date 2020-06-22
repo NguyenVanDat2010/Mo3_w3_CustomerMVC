@@ -10,6 +10,11 @@
 <html>
 <head>
     <title>Edit Customer</title>
+    <style>
+        .message{
+            color: green;
+        }
+    </style>
 </head>
 <body>
 <h1>Edit Customer</h1>
