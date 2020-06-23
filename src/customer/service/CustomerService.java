@@ -44,12 +44,33 @@ public class CustomerService implements ICustomerService {
         customerMap.remove(id);
     }
 
-    /** Tìm kiếm và lấy ra tất cả các bản ghi chứa giá trị cần tìm trong vòng for*/
+    /**
+     * Tìm kiếm và lấy ra tất cả các bản ghi chứa giá trị cần tìm trong vòng for
+     */
     @Override
     public List<Customer> search(String value) {
         ArrayList<Customer> customerArrayList = (ArrayList<Customer>) findAll();
 
         List<Customer> customerList = new ArrayList<>();
+
+        /** Xóa bỏ tất cả các khoảng trắng đầu và cuối khi tìm kiếm một giá trị bất kỳ*/
+        int firstIndex = 0;
+        int lastIndex = value.length() - 1;
+        if (value.charAt(0) == ' ' || value.charAt(value.length() - 1) == ' ') {
+            for (int i = 0; i < value.length(); i++) {
+                if (value.charAt(i) != ' ') {
+                    firstIndex = i;
+                    for (int j = value.length() - 1; j >= 0; j--) {
+                        if (value.charAt(j) != ' ') {
+                            lastIndex = j;
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            value = value.substring(firstIndex, lastIndex);
+        }
 
         for (Customer customer : customerArrayList) {
             if (Integer.toString(customer.getId()).equals(value) ||
