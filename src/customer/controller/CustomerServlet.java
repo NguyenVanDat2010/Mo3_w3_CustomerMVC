@@ -35,8 +35,32 @@ public class CustomerServlet extends HttpServlet {
             case "delete":
                 deleteCustomer(request, response);
                 break;
+            case "search":
+                searchCustomer(request,response);
             default:
                 break;
+        }
+    }
+
+    private void searchCustomer(HttpServletRequest request, HttpServletResponse response) {
+        String value = request.getParameter("searchValue");
+        Customer customer = this.customerService.search(value);
+//        List<Customer> customer = this.customerService.search(value);
+
+        RequestDispatcher dispatcher;
+
+        if (customer == null) {
+            dispatcher = request.getRequestDispatcher("error-404.jsp");
+        } else {
+            request.setAttribute("customer", customer);
+            dispatcher = request.getRequestDispatcher("customer/view.jsp");
+        }
+        try {
+            dispatcher.forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -171,37 +195,6 @@ public class CustomerServlet extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        String value = request.getParameter("submitValue");
-//        List<Customer> customerList = this.customerService.findAll();
-//
-//        RequestDispatcher dispatcher;
-//        Customer customer = null;
-//
-//        if (value == null){
-//            dispatcher = request.getRequestDispatcher("error-404.jsp");
-//        }else {
-//            for (int i=0;i<customerList.size();i++){
-//                if (
-//                        customerList.get(i).getId()==Integer.parseInt(value)||
-//                        customerList.get(i).getName().toLowerCase().contains(value) ||
-//                        customerList.get(i).getEmail().toLowerCase().contains(value)||
-//                        customerList.get(i).getAddress().toLowerCase().contains(value)
-//                ) {
-//                    customer = this.customerService.findById(i);
-//                    break;
-//                }
-//            }
-//            request.setAttribute("customer",customer);
-//            dispatcher = request.getRequestDispatcher("customer/view.jsp");
-//        }
-//        try {
-//            dispatcher.forward(request, response);
-//        } catch (ServletException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     /**

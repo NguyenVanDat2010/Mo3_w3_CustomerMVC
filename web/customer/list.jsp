@@ -38,8 +38,10 @@
 </table>
 <br><br>
 
-<%--<input type="text" name="submitValue" placeholder="Enter your word">--%>
-<%--<a href="/customers?action=view"><input type="submit" name="submitView" value="View customer"></a>--%>
+<form method="post" action="/customers?action=search">
+    <input type="text" name="searchValue" placeholder="Enter your word">
+    <input type="submit" name="submitView" value="Search customer">
+</form>
 
 </body>
 </html>
