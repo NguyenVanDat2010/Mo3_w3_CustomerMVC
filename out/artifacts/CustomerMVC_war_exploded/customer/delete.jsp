@@ -45,10 +45,5 @@
         </table>
     </fieldset>
 </form>
-<p>
-    <c:if test="${requestScope['message']!=null}">
-        <span class="message">${requestScope['message']}</span>
-    </c:if>
-</p>
 </body>
 </html>

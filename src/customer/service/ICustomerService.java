@@ -16,7 +16,7 @@ public interface ICustomerService {
 
     void delete(int id);
 
-    Customer search(String value);
+//    Customer search(String value);
 
-//    List<Customer> search(String value);
+    List<Customer> search(String value);
 }

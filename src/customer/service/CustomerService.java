@@ -44,25 +44,12 @@ public class CustomerService implements ICustomerService {
         customerMap.remove(id);
     }
 
-//    @Override
-//    public List<Customer> search(String value) {
-//        ArrayList<Customer> customerArrayList = (ArrayList<Customer>) findAll();
-//        List<Customer> customerList = new ArrayList<>();
-//        for (Customer customer : customerArrayList) {
-//            if (Integer.toString(customer.getId()).equals(value) ||
-//                    customer.getName().toLowerCase().contains(value.toLowerCase()) ||
-//                    customer.getEmail().toLowerCase().contains(value.toLowerCase()) ||
-//                    customer.getAddress().toLowerCase().contains(value.toLowerCase())
-//            ) {
-//                customerList.add(customer);
-//            }
-//        }
-//        return customerList;
-//    }
-
+    /** Tìm kiếm và lấy ra tất cả các bản ghi chứa giá trị cần tìm trong vòng for*/
     @Override
-    public Customer search(String value) {
+    public List<Customer> search(String value) {
         ArrayList<Customer> customerArrayList = (ArrayList<Customer>) findAll();
+
+        List<Customer> customerList = new ArrayList<>();
 
         for (Customer customer : customerArrayList) {
             if (Integer.toString(customer.getId()).equals(value) ||
@@ -70,24 +57,26 @@ public class CustomerService implements ICustomerService {
                     customer.getEmail().toLowerCase().contains(value.toLowerCase()) ||
                     customer.getAddress().toLowerCase().contains(value.toLowerCase())
             ) {
-                return customer;
+                customerList.add(customer);
             }
         }
-        return null;
+        return customerList;
+    }
 
-
-//        int index = 0;
-//        for (int i = 0; i < customerMap.size(); i++) {
-//            if (
-//                    customerMap.get(i).getId() == Integer.parseInt(value) ||
-//                            customerMap.get(i).getName().toLowerCase().contains(value) ||
-//                            customerMap.get(i).getEmail().toLowerCase().contains(value) ||
-//                            customerMap.get(i).getAddress().toLowerCase().contains(value)
+    /** Tìm kiếm chỉ lấy ra 1 bản ghi đầu tiên tìm thấy trong vòng for*/
+//    @Override
+//    public Customer search(String value) {
+//        ArrayList<Customer> customerArrayList = (ArrayList<Customer>) findAll();
+//
+//        for (Customer customer : customerArrayList) {
+//            if (Integer.toString(customer.getId()).equals(value) ||
+//                    customer.getName().toLowerCase().contains(value.toLowerCase()) ||
+//                    customer.getEmail().toLowerCase().contains(value.toLowerCase()) ||
+//                    customer.getAddress().toLowerCase().contains(value.toLowerCase())
 //            ) {
-//                index = i;
-//                return customerMap.get(index);
+//                return customer;
 //            }
 //        }
 //        return null;
-    }
+//    }
 }

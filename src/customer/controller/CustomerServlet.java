@@ -44,16 +44,16 @@ public class CustomerServlet extends HttpServlet {
 
     private void searchCustomer(HttpServletRequest request, HttpServletResponse response) {
         String value = request.getParameter("searchValue");
-        Customer customer = this.customerService.search(value);
-//        List<Customer> customer = this.customerService.search(value);
+//        Customer customer = this.customerService.search(value);
+        List<Customer> customer = this.customerService.search(value);
 
         RequestDispatcher dispatcher;
 
         if (customer == null) {
             dispatcher = request.getRequestDispatcher("error-404.jsp");
         } else {
-            request.setAttribute("customer", customer);
-            dispatcher = request.getRequestDispatcher("customer/view.jsp");
+            request.setAttribute("customers", customer);
+            dispatcher = request.getRequestDispatcher("customer/search.jsp");
         }
         try {
             dispatcher.forward(request, response);
